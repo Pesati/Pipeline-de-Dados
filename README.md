@@ -33,6 +33,7 @@ A segurança do dado é validada continuamente através de testes guiados por co
 ```bash
 # Executando a validação de LGPD
 behave
+```
 
 ## ⚙️ Como Configurar e Executar o Projeto
 
