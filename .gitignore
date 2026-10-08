@@ -1,0 +1,19 @@
+# Segredos e Credenciais (NUNCA SUBIR)
+.env
+
+# Ambiente Virtual Python
+.venv/
+venv/
+
+# Arquivos de Checkpoint e Logs do Spark
+checkpoints/
+spark-warehouse/
+_spark_metadata/
+
+# Arquivos locais pesados (Hadoop)
+hadoop/
+
+# Cache do Python e Behave
+__pycache__/
+*.pyc
+.behave_cache/
