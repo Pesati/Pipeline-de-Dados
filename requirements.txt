@@ -1,0 +1,5 @@
+pyspark
+python-dotenv
+behave
+kafka-python
+confluent-kafka

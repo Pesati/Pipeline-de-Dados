@@ -33,3 +33,71 @@ A segurança do dado é validada continuamente através de testes guiados por co
 ```bash
 # Executando a validação de LGPD
 behave
+
+## ⚙️ Como Configurar e Executar o Projeto
+
+### Pré-requisitos
+* **Python 3.10+** instalado.
+* **Docker Desktop** instalado e rodando.
+* Conta na **AWS** com um bucket S3 criado e credenciais programáticas (Access Key e Secret Key).
+* *(Apenas para Windows)*: Binários do Hadoop (winutils) configurados localmente na pasta `hadoop/`.
+
+### 1. Configuração do Ambiente
+Clone o repositório e crie um ambiente virtual:
+```bash
+git clone https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git
+cd NOME_DO_REPOSITORIO
+python -m venv .venv
+```
+
+Ative o ambiente virtual:
+* **Windows:** `.venv\Scripts\activate`
+* **Linux/Mac:** `source .venv/bin/activate`
+
+Instale as dependências do projeto:
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configuração de Credenciais
+Crie um arquivo chamado `.env` na raiz do projeto e insira suas credenciais da AWS (este arquivo é ignorado pelo Git por segurança):
+```env
+AWS_ACCESS_KEY=sua_access_key_aqui
+AWS_SECRET_KEY=sua_secret_key_aqui
+```
+
+### 3. Subindo a Infraestrutura (Kafka)
+Inicie os containers do Zookeeper e Kafka em segundo plano:
+```bash
+docker-compose up -d
+```
+
+### 4. Executando o Pipeline de Dados
+Abra terminais separados (com o `.venv` ativado em todos) para simular o ambiente de streaming e batch:
+
+**Terminal 1 (Gerador de Transações):**
+```bash
+python src/gerador.py
+```
+
+**Terminal 2 (Camada Bronze - Ingestão Streaming):**
+```bash
+python src/1_bronze.py
+```
+
+**Terminal 3 (Camada Silver - Tratamento e LGPD):**
+```bash
+python src/2_silver.py
+```
+
+**Terminal 4 (Camada Gold - Agregação Batch):**
+*(Execute este job apenas quando já houver dados na Silver)*
+```bash
+python src/3_gold.py
+```
+
+### 5. Validando a Qualidade (Testes BDD)
+Para garantir que a regra de mascaramento de CPF da LGPD está funcionando e os dados sensíveis não estão vazando para o Data Lakehouse, execute a suíte de testes automatizados:
+```bash
+behave
+```

@@ -1,43 +1,9 @@
-import os
-import pyspark
-from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, StringType, DoubleType
 from pyspark.sql.functions import from_json, col, sha2, current_timestamp
-from dotenv import load_dotenv
+from spark_setup import obter_spark_session
 
-# Carrega as chaves secretas do arquivo .env
-load_dotenv()
-
-# Configuração do Hadoop para o Windows
-pasta_hadoop = os.path.join(os.getcwd(), 'hadoop')
-os.environ['HADOOP_HOME'] = pasta_hadoop
-os.environ['PATH'] = os.path.join(pasta_hadoop, 'bin') + os.pathsep + os.environ.get('PATH', '')
-
+spark = obter_spark_session("PipelineSilver_KafkaToS3")
 NOME_BUCKET = "datalake-bancario-pesati"
-AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
-AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY")
-
-versao_spark = pyspark.__version__
-
-pacotes = (
-    f"org.apache.spark:spark-sql-kafka-0-10_2.13:{versao_spark},"
-    "org.apache.hadoop:hadoop-aws:3.5.0,"
-    "com.amazonaws:aws-java-sdk-bundle:1.12.766"
-)
-
-spark = SparkSession.builder \
-    .appName("PipelineSilver_S3ToS3") \
-    .config("spark.jars.packages", pacotes) \
-    .config("spark.driver.host", "127.0.0.1") \
-    .config("spark.hadoop.fs.s3a.access.key", AWS_ACCESS_KEY) \
-    .config("spark.hadoop.fs.s3a.secret.key", AWS_SECRET_KEY) \
-    .config("spark.hadoop.fs.s3a.endpoint", "s3.sa-east-1.amazonaws.com") \
-    .config("spark.hadoop.fs.s3a.endpoint.region", "sa-east-1") \
-    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
-    .config("spark.hadoop.fs.s3a.aws.credentials.provider", "org.apache.hadoop.fs.s3a.SimpleAWSCredentialsProvider") \
-    .getOrCreate()
-
-spark.sparkContext.setLogLevel("WARN")
 
 print("Lendo dados brutos da Camada Bronze no S3...")
 
