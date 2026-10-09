@@ -17,3 +17,5 @@ hadoop/
 __pycache__/
 *.pyc
 .behave_cache/
+
+datalake/
