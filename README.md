@@ -19,7 +19,7 @@ O pipeline foi desenhado para simular um ambiente corporativo de alta disponibil
 * **Storage/Nuvem:** AWS S3 (com configuração de autenticação via IAM)
 * **Qualidade e Testes:** `behave` (Behavior-Driven Development - BDD)
 
-![Diagrama de Arquitetura](img/arquitetura.png)
+![Diagrama de Arquitetura](img/arquitetura.jpeg)
 
 ## ⚙️ Decisões de Engenharia e Otimizações
 
