@@ -19,6 +19,8 @@ O pipeline foi desenhado para simular um ambiente corporativo de alta disponibil
 * **Storage/Nuvem:** AWS S3 (com configuração de autenticação via IAM)
 * **Qualidade e Testes:** `behave` (Behavior-Driven Development - BDD)
 
+![Diagrama de Arquitetura](img/arquitetura.png)
+
 ## ⚙️ Decisões de Engenharia e Otimizações
 
 * **Resolução do *Small Files Problem*:** Implementação de gatilhos de tempo (`trigger(processingTime)`) nos jobs de streaming para acumular micro-batches eficientes, reduzindo chamadas de API (PUT requests) e custos de armazenamento no S3.
